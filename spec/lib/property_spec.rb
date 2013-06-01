@@ -89,8 +89,8 @@ module Rentify
         it "returns nothing for something really close" do
           property1.within(2).should == []
         end
-        it { property1.within(4.0).should == [property3] }
-        it { property1.within(10).should == [property3, property2] }
+        it { property1.within(4.0).should == ["Flat 3"] }
+        it { property1.within(10).should == ["Flat 3", "Flat 2"] }
       end
     end
   end

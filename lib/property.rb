@@ -17,7 +17,7 @@ module Rentify
     # Replace with ElasticSearch
     def within distance
       list = ordered.keep_if { |p| p[:distance] < distance }
-      list.map { |p| p[:to] }
+      list.map { |p| p[:to].id }
     end
 
     def distances
