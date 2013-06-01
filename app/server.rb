@@ -13,6 +13,11 @@ module Rentify
       "hello"
     end
 
+    get '/nearest_to' do
+      content_type :json
+      Property.find(:id => params[:id]).within(params[:distance].to_i).to_json
+    end
+
     get '/_info' do
       # return in either both or YAML
       <<-ENDRESPONSE
