@@ -3,7 +3,7 @@ require './lib/distance_calculator'
 module Rentify
   class Property
     include DistanceCalculator
-    extend Enumerable
+
     attr_accessor :id, :name, :bedroom_count, :latitude, :longitude
 
     def initialize data
@@ -53,6 +53,11 @@ module Rentify
 
     def self.clear
       @@all.clear
+    end
+
+    def self.find params={}
+      return @@all if params == {}
+      @@all.find {|p| p.send(params.keys.first) == params.values.first }
     end
   end
 end

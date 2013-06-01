@@ -9,15 +9,35 @@ module Rentify
 
     context "behaves like active record" do
       describe "with no data" do
-        it { Property.first.should == nil }
         it { Property.all.should == [] }
       end
 
       describe "with added data" do
         before { Property.add(property_data1) }
 
-        it { Property.first.should be_an_instance_of Property }
-        it { Property.first.id.should == Property.new(property_data1).id }
+      describe "find" do
+        context "with no data" do
+          it { Property.find(id: 1).should be_nil }
+          it { Property.find(id: '').should be_nil }
+          it { Property.find(id: 'Flat 1').should be_nil }
+        end
+
+        context "with data" do
+          let(:property1) { Property.new(property_data1) }
+          let(:property2) { Property.new(property_data2) }
+          let(:property3) { Property.new(property_data3) }
+
+          before do
+            Property.all << property1 << property2 << property3
+          end
+
+          after { Property.clear }
+
+          it { Property.find(id: 1).should be_nil }
+          it { Property.find(id: '').should be_nil }
+          it { Property.find(id: 'Flat 1').should eq property1 }
+          it { Property.find(name: "Trendy flat").should eq property2 }
+        end
       end
     end
 
