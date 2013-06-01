@@ -8,9 +8,9 @@ group :development, :test do
 end
 
 group :test do
-  gem "webmock",                    "~> 1.8.0"
   gem "debugger"
   gem "rspec"
+  gem 'rack-test'
 end
 
 group :development do

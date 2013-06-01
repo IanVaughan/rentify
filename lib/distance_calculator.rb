@@ -4,10 +4,7 @@ module Rentify
   RADIANS_CONVERSION_FACTOR = 180 / Math::PI
 
   module DistanceCalculator
-
-    # def initialize origin
-    #   # @origin = origin
-    # end
+    include Enumerable
 
     def distance_to dest
       DistanceCalculator.distance_between(self, dest)

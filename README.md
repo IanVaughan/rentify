@@ -1,3 +1,9 @@
+## Install
+
+Get the code from GitHub
+
+    git clone git@github.com:IanVaughan/rentify.git
+    cd rentify
 
 
 ## Setup

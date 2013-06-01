@@ -22,12 +22,5 @@ module Rentify
       it { property.distance_to(other_property).should == 5.071979719976067 }
     end
 
-    # context "returns checks if distance is within a given range" do
-    #   let(:property) { Property.new(property_data1) }
-    #   let(:other_property) { Property.new(property_data2) }
-
-    #   it { property.within?(2).should be_false }
-    #   it { property.within?(20).should be_true }
-    # end
   end
 end

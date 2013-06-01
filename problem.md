@@ -51,14 +51,6 @@ Example Property data:
 
 ## Initial thoughts (brain dump)
 
-1. Parse Property from text file
-    Assumption here is that if some data is presented in this way, more might be as well (Highly unlikely)
-    And just for kicks
-
-1. Read into a data store
-    can just use memory here
-    yaml format
-
 1. Create class for data
     derive from base class or include module for lat/long calculations
 
@@ -73,6 +65,10 @@ Example Property data:
         one big map
             centred on current lat/long
             shows all properties
+
+work out O notation of search
+try / time search with small / large datasets
+organise / sort data so search faster
 
 
 

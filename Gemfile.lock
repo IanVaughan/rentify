@@ -1,16 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.3.4)
-    columnize (0.3.6)
-    crack (0.3.2)
     daemons (1.1.9)
-    debugger (1.6.0)
-      columnize (>= 0.3.1)
-      debugger-linecache (~> 1.2.0)
-      debugger-ruby_core_source (~> 1.2.1)
-    debugger-linecache (1.2.0)
-    debugger-ruby_core_source (1.2.2)
     diff-lcs (1.2.4)
     dotenv (0.7.0)
     eventmachine (1.0.3)
@@ -21,6 +12,8 @@ GEM
     rack (1.5.2)
     rack-protection (1.5.0)
       rack
+    rack-test (0.6.2)
+      rack (>= 1.0)
     rspec (2.13.0)
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
@@ -40,19 +33,15 @@ GEM
     thor (0.18.1)
     tilt (1.4.1)
     timecop (0.6.1)
-    webmock (1.8.11)
-      addressable (>= 2.2.7)
-      crack (>= 0.1.7)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  debugger
   fakefs (~> 0.4.2)
   foreman
+  rack-test
   rspec
   sinatra
   thin (~> 1.5.0)
   timecop (~> 0.6.1)
-  webmock (~> 1.8.0)
