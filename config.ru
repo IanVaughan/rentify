@@ -1,2 +1,2 @@
 require './app/server'
-run Server
+run Rentify::Server

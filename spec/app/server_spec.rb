@@ -11,16 +11,19 @@ set :run, false
 set :raise_errors, true
 set :logging, false
 
-describe 'Server' do
-  include Rack::Test::Methods
+module Rentify
+  describe 'Server' do
+    include Rack::Test::Methods
 
-  def app
-    Server
-  end
+    def app
+      Server
+    end
 
-  it "gets root" do
-    get '/'
-    last_response.should be_ok
-    last_response.body.should == 'hello' # last_response.body.include?('hello')
+    it "gets root" do
+      get '/'
+      last_response.should be_ok
+      last_response.body.should == 'hello' # last_response.body.include?('hello')
+    end
+
   end
 end
