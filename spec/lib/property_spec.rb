@@ -33,10 +33,29 @@ module Rentify
 
           after { Property.clear }
 
-          it { Property.find(id: 1).should be_nil }
-          it { Property.find(id: '').should be_nil }
-          it { Property.find(id: 'Flat 1').should eq property1 }
-          it { Property.find(name: "Trendy flat").should eq property2 }
+          it "returns an empty array when no match found on id" do
+            Property.find(id: 10).should == []
+          end
+
+          it "returns 1 match when searched on a unique id" do
+            Property.find(id: 'Flat 1').should eq [property1]
+          end
+
+          it "returns 1 match when searched on a unique name" do
+            Property.find(name: "Trendy flat").should eq [property2]
+          end
+
+          it "returns all properties when no search criteria given" do
+            Property.find().should eq [property1, property2, property3]
+          end
+
+          it "finds properties based on bedroom count" do
+            Property.find(bedroom_count: 2).map(&:id).should eq ['Flat 2', 'Flat 3']
+          end
+
+          it "finds properties based on two fields" do
+            Property.find(bedroom_count: 2, name: 'view').map(&:id).should eq ['Flat 3']
+          end
         end
       end
     end

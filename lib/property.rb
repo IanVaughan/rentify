@@ -57,7 +57,17 @@ module Rentify
 
     def self.find params={}
       return @@all if params == {}
-      @@all.find {|p| p.send(params.keys.first) == params.values.first }
+
+      @@all.find_all do |p|
+        a = params.map do |k,v|
+          case v
+          when String then p.send(k) =~ /#{v}/
+          when Fixnum then p.send(k) == v
+          end
+        end
+
+        a.all?
+      end
     end
   end
 end
