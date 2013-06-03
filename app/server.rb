@@ -27,7 +27,9 @@ module Rentify
     end
 
     get '/map' do
-      erb :map, :locals => { properties: Property.find(validated(params)) }
+      erb :map,
+          :locals => { properties: Property.find(validated(params)) },
+          :layout => :map_layout
     end
 
     # Not used in app yet
