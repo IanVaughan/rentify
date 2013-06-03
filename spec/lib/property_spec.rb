@@ -15,11 +15,11 @@ module Rentify
       describe "with added data" do
         before { Property.add(property_data1) }
 
-      describe "find" do
         context "with no data" do
-          it { Property.find(id: 1).should be_nil }
-          it { Property.find(id: '').should be_nil }
-          it { Property.find(id: 'Flat 1').should be_nil }
+          it { Property.find(id: 1).first.should be_nil }
+          it { Property.find(id: 1).count.should == 0 }
+          it { Property.find(id: '').first.should be_nil }
+          it { Property.find(id: 'Flat 1').first.should be_nil }
         end
 
         context "with data" do
@@ -33,22 +33,36 @@ module Rentify
 
           after { Property.clear }
 
+          it "returns json" do
+            prop = Property.find(name: "Trendy flat")
+            prop.should be_an_instance_of Property
+            prop.first.should be_an_instance_of Property
+            prop.first.to_json.should == property_data2.to_json
+          end
+
+          it "should be case insensitive" do
+            Property.find(name: "tRendy").first.to_json.should == property_data2.to_json
+          end
+
           it "returns an empty array when no match found on id" do
-            Property.find(id: 10).should == []
+            Property.find(id: 10).first.should be_nil
           end
 
           it "returns 1 match when searched on a unique id" do
-            Property.find(id: 'Flat 1').should eq [property1]
+            Property.find(id: 'Flat 1').count.should eq 1
+            Property.find(id: 'Flat 1').first.should eq property1
           end
 
           it "returns 1 match when searched on a unique name" do
-            Property.find(name: "Trendy flat").should eq [property2]
+            Property.find(name: "Trendy flat").first.should eq property2
           end
 
           it "returns all properties when no search criteria given" do
             Property.find().should eq [property1, property2, property3]
           end
 
+          # This only "meets" the requirement of finding "more than 2 bedrooms"
+          # But it would make sense to add min/max bed count
           it "finds properties based on bedroom count" do
             Property.find(bedroom_count: 2).map(&:id).should eq ['Flat 2', 'Flat 3']
           end
@@ -104,12 +118,34 @@ module Rentify
         property1.ordered.should == expected
       end
 
-      context "returns properties within a given distance range" do
-        it "returns nothing for something really close" do
-          property1.within(2).should == []
+      context "#within : returns properties within a given distance range" do
+        it "returns an Property" do
+          property1.within(2).should be_an_instance_of Property
         end
-        it { property1.within(4.0).should == ["Flat 3"] }
-        it { property1.within(10).should == ["Flat 3", "Flat 2"] }
+
+        it "returns nothing for something really close" do
+          property1.within(2).first.should be_nil #be_an_instance_of Property
+          property1.within(2).count.should == 0
+        end
+
+        it { property1.within(4.0).should be_an_instance_of Property }
+        it { property1.within(4.0).first.should be_an_instance_of Property }
+        it { property1.within(4.0).map(&:id).should == ["Flat 3"] }
+        it { property1.within(10).map(&:id).should == ["Flat 3", "Flat 2"] }
+      end
+
+      context "#rooms : finds properties with same number or more rooms" do
+        it "returns an Property" do
+          property1.rooms.should be_an_instance_of Property
+        end
+
+        it "returns nothing when properties do not find a match" do
+          property1.rooms(min: 10).count.should == 0
+        end
+
+        it "returns matching when properties match" do
+          property1.rooms(min: 2).map(&:id).should == ["Flat 1", "Flat 2", "Flat 3"]
+        end
       end
     end
   end
