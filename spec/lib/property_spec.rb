@@ -33,10 +33,11 @@ module Rentify
 
           after { Property.clear }
 
-          it "returns json" do
+          it "returns an Array of Properties for objects found" do
             prop = Property.find(name: "Trendy flat")
-            prop.should be_an_instance_of Property
+            prop.should be_an_instance_of Array
             prop.first.should be_an_instance_of Property
+            prop.first.name.should == "Trendy flat"
             prop.first.to_json.should == property_data2.to_json
           end
 
@@ -96,47 +97,70 @@ module Rentify
       let(:property1) { Property.new(property_data1) }
       let(:property2) { Property.new(property_data2) }
       let(:property3) { Property.new(property_data3) }
+      let(:property4) { Property.new(property_data4) }
+
       before do
         Property.all << property1 << property2 << property3
       end
 
       after { Property.clear }
 
-      it "creates a hash of distances to each other property" do
-        expected = [
-          {:distance=>5.071979719976067, :to=>property2},
-          {:distance=>3.849045551582071, :to=>property3}
-        ]
-        property1.distances.should eq expected
-      end
-
-      it "orders properties by distance" do
-        expected = [
-          {:distance=>3.849045551582071, :to=>property3},
-          {:distance=>5.071979719976067, :to=>property2}
-        ]
-        property1.ordered.should == expected
-      end
-
-      context "#within : returns properties within a given distance range" do
-        it "returns an Property" do
-          property1.within(2).should be_an_instance_of Property
+      describe "#distances" do
+        it "creates a hash of distances to each other property" do
+          expected = [
+            {:distance=>5.071979719976067, :to=>property2},
+            {:distance=>3.849045551582071, :to=>property3}
+          ]
+          property1.distances.should eq expected
         end
 
-        it "returns nothing for something really close" do
-          property1.within(2).first.should be_nil #be_an_instance_of Property
-          property1.within(2).count.should == 0
+        it "orders properties by distance" do
+          expected = [
+            {:distance=>3.849045551582071, :to=>property3},
+            {:distance=>5.071979719976067, :to=>property2}
+          ]
+          property1.ordered.should == expected
         end
-
-        it { property1.within(4.0).should be_an_instance_of Property }
-        it { property1.within(4.0).first.should be_an_instance_of Property }
-        it { property1.within(4.0).map(&:id).should == ["Flat 3"] }
-        it { property1.within(10).map(&:id).should == ["Flat 3", "Flat 2"] }
       end
 
-      context "#rooms : finds properties with same number or more rooms" do
-        it "returns an Property" do
-          property1.rooms.should be_an_instance_of Property
+      describe "#within" do # : returns properties within a given distance range" do
+        context "its return type" do
+          subject { property1.within(10.0) }
+          it { should be_an_instance_of Array }
+          its(:first) { should be_an_instance_of Property }
+        end
+
+        context "returns nothing when no results match" do
+          subject { property1.within(1) }
+          it { should be_an_instance_of Array }
+          it { should == [] }
+          its(:first) { should be_nil }
+          its(:count) { should == 0 }
+        end
+
+        context "returns data when found" do
+          subject { property1.within(4.1) }
+
+          it { should be_an_instance_of Array }
+          it { should eq [property3] }
+          its(:first) { should == property3 }
+          its(:count) { should == 1 }
+
+          it { property1.within(4.1).map(&:id).should == ["Flat 3"] }
+          it { property1.within(4).map(&:id).should == ["Flat 3"] }
+          it { property1.within(10).map(&:id).should == ["Flat 3", "Flat 2"] }
+        end
+      end
+
+      describe "#rooms" do # : finds properties with same number or more rooms" do
+        context "its return type" do
+          subject { property1.rooms }
+          it { should be_an_instance_of Array }
+          its(:first) { should be_an_instance_of Property }
+        end
+
+        it "has Properties within the Array" do
+          property1.rooms.first.should be_an_instance_of Property
         end
 
         it "returns nothing when properties do not find a match" do
@@ -144,7 +168,78 @@ module Rentify
         end
 
         it "returns matching when properties match" do
-          property1.rooms(min: 2).map(&:id).should == ["Flat 1", "Flat 2", "Flat 3"]
+          property1.rooms(min: 2).map(&:id).should == ["Flat 2", "Flat 3"]
+        end
+      end
+
+      describe "method call order" do
+        it "doesn't mater which order methods are called" do
+          room_first = [property1.rooms, property1.within(10)]
+          within_first = [property1.within(10), property1.rooms]
+          room_first.should == within_first.reverse
+        end
+
+        context "chains searches" do
+          before { Property.all << property4 }
+          subject { property4 }
+          its(:count) { should == 4 }
+
+          describe "narrow search results" do
+            let(:subset) { subject.within(1) }
+
+            it "has not altered the original dataset" do
+              subject.count.should == 4
+            end
+
+            it "has returned a subset" do
+              subset.count.should == 1
+            end
+          end
+
+          describe "narrow search results does not include itself" do
+            let(:subset) { subject.within(1000) }
+
+            it "has returned a subset of other properties" do
+              subset.count.should == 3
+              subset.map(&:id).should_not include("Flat 4")
+            end
+          end
+
+          describe "narrow search results by two types" do
+            before do
+              @subset1 = subject.within(6)
+              @subset2 = subject.rooms(min: 3)
+            end
+
+            it "has altered the original dataset and returned a subset" do
+              subject.id.should == "Flat 4"
+              subject.count.should == 1
+
+              @subset1.count.should == 2
+              @subset1.map(&:id).should == ["Flat 2", "Flat 1"]
+
+              @subset2.count.should == 1
+              @subset2.map(&:id).should == ["Flat 1"]
+            end
+          end
+
+          describe "narrow search results by two types in different order" do
+            before do
+              @subset2 = subject.rooms(min: 3)
+              @subset1 = subject.within(6)
+            end
+
+            it "has altered the original dataset and returned a subset" do
+              subject.id.should == "Flat 4"
+              subject.count.should == 1
+
+              @subset1.count.should == 1
+              @subset1.map(&:id).should == ["Flat 1"]
+
+              @subset2.count.should == 1
+              @subset2.map(&:id).should == ["Flat 1"]
+            end
+          end
         end
       end
     end

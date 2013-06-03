@@ -1,4 +1,5 @@
 require './lib/distance_calculator'
+require 'json'
 
 module Rentify
   class Property
@@ -43,17 +44,13 @@ module Rentify
     # Replace with ElasticSearch
     def within distance
       # if ordered, then just need to loop until first exceeded
-      list = ordered.keep_if { |p| p[:distance] < distance }
-      a = Property.new
-      a.properties = list.map {|p| p[:to] }
-      a
+      keep = ordered.keep_if { |p| p[:distance] < distance }
+      keep.map {|p| p[:to] }
     end
 
     def rooms min: 0, max: 10
-      list = properties.keep_if {|p| (p.bedroom_count >= min && p.bedroom_count < max) }
-      a = Property.new
-      a.properties = list
-      a
+      properties.delete(self)
+      properties.keep_if {|p| (p.bedroom_count >= min && p.bedroom_count < max) }
     end
 
     def to_json
@@ -103,9 +100,8 @@ module Rentify
           end
         end.all?
       end
-      p = Property.new
-      p.properties = list
-      p
+
+      list
     end
   end
 end
