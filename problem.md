@@ -71,9 +71,7 @@ try / time search with small / large datasets
 organise / sort data so search faster
 
 
-1. Get Google Maps API key
-1. Get Google Maps API ruby gem
-
-
 1. Push up to heroku
+
+
 
