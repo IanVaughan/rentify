@@ -6,6 +6,7 @@ module Rentify
   class Server < Sinatra::Base
     configure :production, :development do
       enable :logging
+      enable :sessions
       set :raise_errors, true
       set :show_exceptions, false
     end
@@ -13,11 +14,12 @@ module Rentify
     helpers Helpers
 
     get '/' do
-      logger.info "hello"
       erb :index
     end
 
     get '/search' do
+      session[:last_search] = validated(params)
+
       erb :search,
           :locals => {
             properties: Property.find(validated(params))
@@ -31,19 +33,21 @@ module Rentify
     # Not used in app yet
     get '/find' do
       content_type :json
-      # Property.find(params).first.to_json
       a = Property.find(validated(params))
-      logger.debug "find : #{a.inspect}"
       a.first.to_json
     end
 
     get '/property' do
-      property = Property.find(validated(params)).first
-      distance = params[:distance].to_i || 20
+      distance = params.has_key?('distance') ? params['distance'].to_i : 20
+      property = Property.find(validated(params))
+      property = property.first
+
+      property.rooms(min: 2)
+      others = property.within(distance)
       erb :property_detail,
           :locals => {
             property: property,
-            others: property.within(distance).rooms(min: 2)
+            others: others
           }
     end
 

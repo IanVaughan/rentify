@@ -13,7 +13,7 @@
             :layout => false,
             :locals => {
               property: property,
-              distance: distance_from.nil? ? nil : distance_from.distance_to(property).round
+              distance: distance.nil? ? nil : distance_from.distance_to(property).round(2)
             } %>
   <% end %>
 </table>

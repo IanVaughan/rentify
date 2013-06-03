@@ -1,11 +1,14 @@
 <h2>Search</h2>
 
 <form action="/search" method="get">
-  <label for="post_title">Search for:</label>
-  <input id="post_title" name="name" type="text" value="" />
+  <label for="search_name">Search for:</label>
+  <input id="search_name" name="name" type="text" value="<%= last_search('name') %>" />
 
-  <label for="post_body">Rooms</label>
-  <input id="post_body" name="bedroom_count" value="2" />
+  <label for="search_room">Rooms</label>
+  <input id="search_room" name="bedroom_count" value="2" />
+
+  <label for="search_distance">Include others within</label>
+  <input id="search_distance" name="distance" value="20" />
 
   <input type="submit" value="Go Search" />
 </form>
