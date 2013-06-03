@@ -1,16 +1,18 @@
 <h2>Search</h2>
 
-<form action="/search" method="get">
-  <label for="search_name">Search for:</label>
-  <input id="search_name" name="name" type="text" value="<%= last_search('name') %>" />
+<form action="/search" method="get" class="form-inline">
+  <fieldset>
+    <label for="search_name">Search for:</label>
+    <input id="search_name" name="name" type="text" value="<%= last_search('name') %>" class="input-small"/>
 
-  <label for="search_room">Rooms</label>
-  <input id="search_room" name="bedroom_count" value="2" />
+    <label for="search_room">with</label>
+    <input id="search_room" name="bedroom_count" value="2" type="text" class="input-mini"/>
 
-  <label for="search_distance">Include others within</label>
-  <input id="search_distance" name="distance" value="20" />
+    <label for="search_distance">rooms. And include others within</label>
+    <input id="search_distance" name="distance" value="20" type="text" class="input-mini" />
 
-  <input type="submit" value="Go Search" />
+    <button type="submit" class="btn btn-primary"><i class="icon-search icon-white"></i> Search</button>
+  </fieldset>
 </form>
 
 <br/>
