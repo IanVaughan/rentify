@@ -59,6 +59,10 @@ module Rentify
       Property.find(:id => params[:id]).first.within(params[:distance].to_i).to_json
     end
 
+    get '/about' do
+      erb :about
+    end
+
     get '/_info' do
       content_type :json
       # return in either both or YAML

@@ -46,8 +46,8 @@ module Rentify
     end
 
     def rooms min: 0, max: 10
-      properties.delete(self)
-      properties.keep_if {|p| (p.bedroom_count >= min && p.bedroom_count < max) }
+      keep = ordered.keep_if { |p| (p[:to].bedroom_count >= min && p[:to].bedroom_count < max) }
+      keep.map { |p| p[:to] }
     end
 
     def to_json

@@ -169,7 +169,12 @@ module Rentify
         end
 
         it "returns matching when properties match" do
-          property1.rooms(min: 2).map(&:id).should == ["Flat 2", "Flat 3"]
+          property1.rooms(min: 2).map(&:id).should == ["Flat 3", "Flat 2"]
+        end
+
+        it "can be called again" do
+          property1.rooms(min: 2).map(&:id).should == ["Flat 3", "Flat 2"]
+          property1.rooms(min: 2).map(&:id).should == ["Flat 3", "Flat 2"]
         end
       end
 
@@ -214,7 +219,7 @@ module Rentify
 
             it "has altered the original dataset and returned a subset" do
               subject.id.should == "Flat 4"
-              subject.count.should == 1
+              subject.count.should == 4
 
               @subset1.count.should == 2
               @subset1.map(&:id).should == ["Flat 2", "Flat 1"]
@@ -232,13 +237,31 @@ module Rentify
 
             it "has altered the original dataset and returned a subset" do
               subject.id.should == "Flat 4"
-              subject.count.should == 1
+              subject.count.should == 4
 
               @subset1.count.should == 1
               @subset1.map(&:id).should == ["Flat 1"]
 
               @subset2.count.should == 1
               @subset2.map(&:id).should == ["Flat 1"]
+            end
+          end
+
+          describe "narrow search results by two types in different order 2" do
+            before do
+              @subset2 = subject.rooms(min: 2)
+              @subset1 = subject.within(6)
+            end
+
+            it "has altered the original dataset and returned a subset" do
+              subject.id.should == "Flat 4"
+              subject.count.should == 4
+
+              @subset1.count.should == 2
+              @subset1.map(&:id).should == ["Flat 2", "Flat 1"]
+
+              @subset2.count.should == 3
+              @subset2.map(&:id).should == ["Flat 2", "Flat 1", "Flat 3"]
             end
           end
         end

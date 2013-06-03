@@ -47,31 +47,3 @@ Example Property data:
     "bedroom_count": 1,
     "latitude": 50.066944,
     "longitude": -5.746944
-
-
-## Initial thoughts (brain dump)
-
-1. Write Sinatra app (no need for heavier rails in this case)
-    1. provide api call point so service can be used by other internal/external apps
-    1. to be used be js on front end
-
-         /nearest_to?name=flat 1?distance=20&bedroom=2
-         => {flat2: lat long, flat3: lat long}
-
-    1. root will serve welcome/about page
-    1. search page
-        a search box
-        one big map
-            centred on current lat/long
-            shows all properties
-
-
-work out O notation of search
-try / time search with small / large datasets
-organise / sort data so search faster
-
-
-1. Push up to heroku
-
-
-
