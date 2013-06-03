@@ -16,5 +16,26 @@ module Rentify
         ''
       end
     end
+
+
+    NUMBER_TO_ADD = 100
+    RANDOMIZE = {
+      :bedroom_count => 1..10,
+      :latitude => 51.201000..51.601000,
+      :longitude => 0.142000..0.542000
+    }
+
+    def get_add_data
+      {id: "Flat #{rand(1...1000)}",
+       name: "A house",
+       bedroom_count: rand(RANDOMIZE[:bedroom_count]),
+       latitude: rand(RANDOMIZE[:latitude]),
+       longitude: rand(RANDOMIZE[:longitude])
+      }
+    end
+
+    def add_random_seed_data
+      NUMBER_TO_ADD.times.collect { Rentify::Property.add get_add_data }
+    end
   end
 end
