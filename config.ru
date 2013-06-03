@@ -7,9 +7,6 @@ require './lib/property'
 data = Rentify::Import.import('./import/data.txt')
 data.each {|d| Rentify::Property.add d }
 
-logger = Logger.new('log/app.log')
-use Rack::CommonLogger, logger
-
 NUMBER_TO_ADD = 100
 
 RANDOMIZE = {
