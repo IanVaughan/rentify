@@ -1,5 +1,6 @@
 require "sinatra/base"
 require './app/helpers'
+require 'logger'
 
 module Rentify
   class Server < Sinatra::Base
