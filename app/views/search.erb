@@ -2,15 +2,13 @@
 
 <form action="/search" method="get" class="form-inline">
   <fieldset>
-    <label for="search_name">Search for:</label>
+    <label for="search_name">Search for</label>
     <input id="search_name" name="name" type="text" value="<%= last_search('name') %>" class="input-small"/>
 
     <label for="search_room">with</label>
-    <input id="search_room" name="bedroom_count" value="2" type="text" class="input-mini"/>
+    <input id="search_room" name="bedroom_count" value="<%= last_search('bedroom_count') %>" type="text" class="input-mini"/>
 
-    <label for="search_distance">rooms.    And include others within</label>
-    <input id="search_distance" name="distance" value="20" type="text" class="input-mini" />
-    <label for="search_distance">km</label>
+    <label for="search_distance">bedrooms.
 
     <button type="submit" class="btn btn-primary"><i class="icon-search icon-white"></i> Search</button>
     <a href="/search" class="btn btn-inverse"><i class="icon-refresh icon-white"></i> Show all</a>
@@ -20,10 +18,5 @@
 <br/>
 <br/>
 
-<%= erb :property_table,
-        :layout => false,
-        :locals => {
-          properties: properties,
-          distance: nil,
-          others: nil
-        } %>
+<%= erb :property_table, :layout => false,
+        :locals => { properties: properties, distance: nil, others: nil } %>
