@@ -8,15 +8,13 @@ module Rentify
 
     attr_accessor :id, :name, :bedroom_count, :latitude, :longitude, :properties
 
-    def initialize data = nil
-      unless data.nil?
-        @id = data[:id]
-        @name = data[:name]
-        @bedroom_count = data[:bedroom_count]
-        @latitude = data[:latitude]
-        @longitude = data[:longitude]
-        @properties = @@all
-      end
+    def initialize data
+      @id = data[:id]
+      @name = data[:name]
+      @bedroom_count = data[:bedroom_count]
+      @latitude = data[:latitude]
+      @longitude = data[:longitude]
+      @properties = @@all
     end
 
     def each
@@ -41,11 +39,10 @@ module Rentify
       @ordered ||= distances.sort_by { |k| k[:distance] }
     end
 
-    # Replace with ElasticSearch
     def within distance
       # if ordered, then just need to loop until first exceeded
       keep = ordered.keep_if { |p| p[:distance] < distance }
-      keep.map {|p| p[:to] }
+      keep.map { |p| p[:to] }
     end
 
     def rooms min: 0, max: 10
