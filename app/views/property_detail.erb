@@ -1,0 +1,14 @@
+<h2><%= property.name %></h2>
+<ul>
+  <li>Bedrooms: <%= property.bedroom_count %></li>
+</ul>
+
+<br/><br/>
+These are close and available :
+
+<%= erb :property_table,
+        :layout => false,
+        :locals => {
+          properties: others,
+          distance_from: property
+        } %>

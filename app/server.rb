@@ -14,15 +14,47 @@ module Rentify
 
     get '/' do
       logger.info "hello"
-      "hello"
+      erb :index
     end
 
+    get '/search' do
+      erb :search,
+          :locals => {
+            properties: Property.find(validated(params))
+          }
+    end
+
+    get '/map' do
+      erb :map, :locals => { properties: Property.find(validated(params)) }
+    end
+
+    # Not used in app yet
+    get '/find' do
+      content_type :json
+      # Property.find(params).first.to_json
+      a = Property.find(validated(params))
+      logger.debug "find : #{a.inspect}"
+      a.first.to_json
+    end
+
+    get '/property' do
+      property = Property.find(validated(params)).first
+      distance = params[:distance].to_i || 20
+      erb :property_detail,
+          :locals => {
+            property: property,
+            others: property.within(distance).rooms(min: 2)
+          }
+    end
+
+    # Not used in app yet
     get '/nearest_to' do
       content_type :json
-      Property.find(:id => params[:id]).within(params[:distance].to_i).to_json
+      Property.find(:id => params[:id]).first.within(params[:distance].to_i).to_json
     end
 
     get '/_info' do
+      content_type :json
       # return in either both or YAML
       <<-ENDRESPONSE
         Ruby:    #{RUBY_VERSION}

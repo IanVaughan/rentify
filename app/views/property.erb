@@ -1,0 +1,8 @@
+<tr>
+  <td><a href="/property?id=<%= property.id %>"><%= property.id %></a></td>
+  <td><%= property.name %></td>
+  <td><%= property.bedroom_count %></td>
+  <% unless distance.nil? %>
+    <td><%= distance %></td>
+  <% end %>
+</tr>

@@ -9,3 +9,6 @@ unless Sinatra::Base.environment == :development
   STDOUT.reopen(log)
   STDERR.reopen(log)
 end
+require './lib/distance_calculator'
+require './lib/import'
+require './lib/property'

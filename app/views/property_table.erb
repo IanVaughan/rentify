@@ -1,0 +1,19 @@
+<table border="1">
+  <tr>
+    <td>id</td>
+    <td>Name</td>
+    <td>Bedrooms</td>
+    <% unless distance.nil? %>
+      <td>Distance</td>
+    <% end %>
+  </tr>
+
+  <% properties.each do |property| %>
+    <%= erb :property,
+            :layout => false,
+            :locals => {
+              property: property,
+              distance: distance_from.nil? ? nil : distance_from.distance_to(property).round
+            } %>
+  <% end %>
+</table>

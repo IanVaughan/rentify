@@ -1,0 +1,22 @@
+<h2>Search</h2>
+
+<form action="/search" method="get">
+  <label for="post_title">Search for:</label>
+  <input id="post_title" name="name" type="text" value="" />
+
+  <label for="post_body">Rooms</label>
+  <input id="post_body" name="bedroom_count" value="2" />
+
+  <input type="submit" value="Go Search" />
+</form>
+
+<br/>
+<br/>
+
+<%= erb :property_table,
+        :layout => false,
+        :locals => {
+          properties: properties,
+          distance: nil,
+          others: nil
+        } %>
