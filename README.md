@@ -12,23 +12,34 @@ Get the code from GitHub
     gem install bundler
     bundle
 
-(This could be part of a bash script named the same within every repo)
-
-
-## Test
-
-    rspec spec
-
-
-    ./script/benchmark
-
+(The above could be part of a bash script named the same within every repo)
 
 
 ## Run
 
+To run in a development environment (it reloads app changes without having to restart the server) :
+
     shotgun
 
-or
+or just use the standard :
 
     rackup
 
+
+## Test
+
+Run the specs by :
+
+    rspec spec
+
+A benchmark of the search/sort can be performed via :
+
+    ./script/benchmark
+
+Command line :
+
+* The API endpoints can be hit via curl, just for kicks :
+
+    curl http://0.0.0.0:9292/find\?id\=Flat%201
+
+    => {"id":"Flat 1","name":"Sizeable house","bedroom_count":2,"latitude":51.501,"longitude":-0.142}

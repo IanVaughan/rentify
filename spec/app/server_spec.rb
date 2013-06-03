@@ -68,23 +68,6 @@ module Rentify
         end
       end
     end
-
-    context "gets nearest_to" do
-      before do
-        mock_property = mock('Property')
-        mock_property.should_receive(:first).and_return(mock_property)
-        mock_property.should_receive(:within).with(20).and_return([{id: 'Flat2', lat: 1}, {id: 'Flat3', lat: 3}])
-        Property.should_receive(:find).with({:id=>"Flat 1"}).and_return(mock_property)
-      end
-
-      it "works" do
-        # nearest_to?id=flat 1?distance=20&bedroom=2
-        get 'nearest_to', :id => 'Flat 1', :distance => 20, :bedroom_count => 2
-        last_response.should be_ok
-        header_content(last_response).should == 'application/json'
-        last_response.body.should == [{id: 'Flat2', lat: 1}, {id: 'Flat3', lat: 3}].to_json
-      end
-    end
   end
 end
 

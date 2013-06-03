@@ -53,12 +53,6 @@ module Rentify
           }
     end
 
-    # Not used in app yet
-    get '/nearest_to' do
-      content_type :json
-      Property.find(:id => params[:id]).first.within(params[:distance].to_i).to_json
-    end
-
     get '/about' do
       erb :about
     end
