@@ -6,6 +6,7 @@ module Rentify
     let(:property_data1) { {id: "Flat 1", name: "A house", bedroom_count: 3, latitude: 51.501000, longitude: -0.142000} }
     let(:property_data2) { {id: "Flat 2", name: "Trendy flat", bedroom_count: 2, latitude: 51.523778, longitude: -0.205500} }
     let(:property_data3) { {id: "Flat 3", name: "Flat with stunning view", bedroom_count: 2, latitude: 51.504444, longitude: -0.086667} }
+    let(:property_data4) { {id: "Flat 4", name: "Trendy flat 2", bedroom_count: 3, latitude: 51.523708, longitude: -0.205510} }
 
     context "behaves like active record" do
       describe "with no data" do
