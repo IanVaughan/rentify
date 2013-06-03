@@ -16,4 +16,5 @@ end
 group :development do
   gem "thin",                       "~> 1.5.0"
   gem "foreman"
+  gem "shotgun"
 end

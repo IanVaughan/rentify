@@ -18,3 +18,12 @@ Get the code from GitHub
 ## Test
 
     rspec spec
+
+## Run
+
+    shotgun
+
+or
+
+    rackup
+
