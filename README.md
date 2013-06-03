@@ -19,6 +19,11 @@ Get the code from GitHub
 
     rspec spec
 
+
+    ./script/benchmark
+
+
+
 ## Run
 
     shotgun
