@@ -1,12 +1,7 @@
 source "https://rubygems.org"
-ruby "2.0.0"
+# ruby "2.0.0"
 
 gem 'sinatra'
-
-group :development, :test do
-  gem "fakefs",                     "~> 0.4.2", :require => "fakefs/safe"
-  gem "timecop",                    "~> 0.6.1"
-end
 
 group :test do
   gem "debugger"
