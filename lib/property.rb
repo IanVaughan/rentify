@@ -33,18 +33,12 @@ module Rentify
         save
       end
     end
-    # private :distances
 
-    # could only sort for upto distance required,
-    # but would mean resorting if a larger distance was requested
-    # Check: does this reorder on every call?
     def ordered #by :distance / :rooms / :price
       @ordered ||= distances.sort_by { |k| k[:distance] }
     end
-    # private :ordered
 
     def within distance, sorted = true
-      # if ordered, then just need to loop until first exceeded
       dataset = sorted ? ordered : distances
       keep = dataset.select { |p| p[:distance] < distance }
       keep.map { |p| p[:to] }
@@ -52,11 +46,7 @@ module Rentify
 
     def rooms dataset: properties, min: 0, max: 10
       raise FindError unless min.is_a?(Fixnum) && max.is_a?(Fixnum)
-      # keep = ordered
-      # keep.delete(self)
       dataset.select {|p| (p.bedroom_count >= min && p.bedroom_count < max) }
-      # keep = ordered.keep_if { |p| (p[:to].bedroom_count >= min && p[:to].bedroom_count < max) }
-      # keep.map { |p| p[:to] }
     end
 
     def to_json
@@ -75,10 +65,8 @@ module Rentify
       hash
     end
 
-    # Class methods
     class << self
 
-      # should this be within the initialize?
       def add data
         self.all << self.new(data)
       end
@@ -95,7 +83,6 @@ module Rentify
         self.all.clear
       end
 
-      # mega overloaded function! needs to be broken down
       def find params={}
         return self.all if params.empty?
 
@@ -105,7 +92,7 @@ module Rentify
           raise FindError, "Supplied params incorrect for :from:#{params[:from]} (:distance:#{params[:distance]}, :min_rooms:#{params[:min_rooms]}) " #[#{params}]"
         end
 
-        result = dataset.each do |p|
+        dataset.each do |p|
           params.each do |k,v|
             case k
             when :distance
@@ -124,14 +111,14 @@ module Rentify
           end
         end
 
-        a = dataset.find_all do |p|
-          b = params.map do |k,v|
+        dataset.find_all do |p|
+          result = params.map do |k,v|
             case v
             when String then p.send(k) =~ /#{v}/i
             when Fixnum then p.send(k) == v
             end
           end
-          b.all?
+          result.all?
         end
       end
 

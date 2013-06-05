@@ -10,7 +10,6 @@ module Rentify
       DistanceCalculator.distance_between(self, dest)
     end
 
-
     def self.distance_between(origin, destination)
       sin_lats = Math.sin(rad(origin.latitude)) * Math.sin(rad(destination.latitude))
       cos_lats = Math.cos(rad(origin.latitude)) * Math.cos(rad(destination.latitude))

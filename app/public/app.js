@@ -59,7 +59,7 @@ function initialize() {
   var center_pos = new google.maps.LatLng(51.501000, -0.142000);
 
   var mapOptions = {
-    zoom: 13,
+    zoom: 10,
     center: center_pos,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   };
@@ -86,6 +86,3 @@ function handleNoGeolocation(errorFlag) {
   }
   map.setCenter(options.position);
 }
-
-// google.maps.event.addDomListener(window, 'load', initialize);
-

@@ -34,7 +34,6 @@ module Rentify
           :layout => :map_layout
     end
 
-    # Not used in app yet
     get '/find' do
       content_type :json
       a = Property.find(validated(params))
@@ -74,7 +73,6 @@ module Rentify
 
     get '/_info' do
       content_type :json
-      # return in either both or YAML?
       <<-ENDRESPONSE
         Ruby:    #{RUBY_VERSION}
         Rack:    #{Rack::VERSION}

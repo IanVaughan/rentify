@@ -4,6 +4,9 @@
 </ul>
 
 <br/><br/>
+<% if others.empty? %>
+There are no other properties nearby!
+<% else %>
 These are close and available :
 
 <%= erb :property_table,
@@ -13,3 +16,5 @@ These are close and available :
           distance_from: property,
           distance: 1
         } %>
+
+<% end %>

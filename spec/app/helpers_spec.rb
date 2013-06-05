@@ -15,18 +15,9 @@ module Rentify
         it { validated({'id' => 1}).should eq({id: 1}) }
       end
 
-      # context "defaults missing parameters" do
       context "removes empty parameters" do
         it { validated({bedroom_count: ''}).should eq({}) }
       end
-    end
-
-    describe '#last_search' do
-      # subject { last_search(field) }
-
-
-      # let(:field) { '' }
-      # let(:data) { session[:]last_search }
     end
 
   end

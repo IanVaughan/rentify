@@ -1,5 +1,3 @@
-# require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
-
 require './app/server'
 require 'sinatra'
 require 'spec_helper'
@@ -28,40 +26,6 @@ module Rentify
       get '/'
       last_response.should be_ok
       last_response.body.include?('home')
-    end
-
-    describe '/property' do
-      context "without data" do
-        # it "returns correct nil" do
-        #   get '/property', :id => 'Flat 11'
-        #   last_response.should be_ok
-        #   last_response.body.should == 'null'
-        # end
-
-        # it "returns correct nil with param" do
-        #   get '/property', :id => 'Flat 11'
-        #   last_response.should be_ok
-        #   last_response.body.should == 'null'
-        # end
-      end
-
-      context "with data" do
-        let(:data1) { {id: "Flat 11", name: "A house", bedroom_count: 3, latitude: 51.501000, longitude: -0.142000} }
-        let(:data2) { {id: "Flat 12", name: "A Flat", bedroom_count: 2, latitude: 51.501000, longitude: -0.142000} }
-
-        before do
-          Property.add data1
-          Property.add data2
-        end
-
-        after { Property.clear }
-
-        # it "returns first data by id" do
-        #   get '/property', :id => 'Flat 11'
-        #   last_response.should be_ok
-        #   last_response.body.should == data1.to_json
-        # end
-      end
     end
 
     describe "/find" do

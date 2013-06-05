@@ -12,12 +12,9 @@ Get the code from GitHub
     gem install bundler
     bundle
 
-(The above could be part of a bash script named the same within every repo)
-
-
 ## Run
 
-To run in a development environment (it reloads app changes without having to restart the server) :
+Run either via :
 
     shotgun
 
