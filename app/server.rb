@@ -57,9 +57,18 @@ module Rentify
       erb :about
     end
 
+    get '/seed/add' do
+      add_random_seed_data #(params[:count].to_i)
+      redirect '/'
+    end
+
+    get '/seed/delete' do
+      # add_random_seed_data(:params[:count].to_i)
+    end
+
     get '/_info' do
       content_type :json
-      # return in either both or YAML
+      # return in either both or YAML?
       <<-ENDRESPONSE
         Ruby:    #{RUBY_VERSION}
         Rack:    #{Rack::VERSION}
