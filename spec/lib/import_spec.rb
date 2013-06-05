@@ -1,6 +1,5 @@
 require 'spec_helper'
 require './lib/import'
-require 'fakefs/spec_helpers'
 
 module Rentify
   describe Import do
