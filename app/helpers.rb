@@ -1,12 +1,28 @@
 module Rentify
   module Helpers
-    FIND_KEYS = [:id, :name, :bedroom_count]
-    def validated p
-      params = {}
-      p.each {|k,v| params[k.to_sym] = v}
-      params.keep_if { |key| FIND_KEYS.include? key.to_sym }
-      params[:bedroom_count] = params[:bedroom_count].to_i if params.include?(:bedroom_count)
+    def validated params
+      params = symbolise(params)
+      params = remove_invalid_keys(params)
+
+      if params.include?(:bedroom_count)
+        if params[:bedroom_count] == ''
+          params.delete(:bedroom_count)
+        else
+          params[:bedroom_count] = params[:bedroom_count].to_i
+        end
+      end
       params
+    end
+
+    def symbolise params
+      ret = {}
+      params.each { |k,v| ret[k.to_sym] = v }
+      ret
+    end
+
+    VALID_KEYS = [:id, :name, :bedroom_count]
+    def remove_invalid_keys params
+      params.keep_if { |key| VALID_KEYS.include? key }
     end
 
     def last_search field
