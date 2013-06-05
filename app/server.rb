@@ -1,6 +1,8 @@
 require "sinatra/base"
 require './app/helpers'
-require 'logger'
+
+include Rentify::Helpers
+Rentify::Helpers.load_test_data
 
 module Rentify
   class Server < Sinatra::Base
@@ -58,12 +60,16 @@ module Rentify
     end
 
     get '/seed/add' do
-      add_random_seed_data #(params[:count].to_i)
+      count = params.has_key?('count') ? params['count'].to_i : 10
+      puts count
+      add_random_seed_data count
       redirect '/'
     end
 
-    get '/seed/delete' do
-      # add_random_seed_data(:params[:count].to_i)
+    get '/seed/clear' do
+      clear_seed_data
+      load_test_data
+      redirect '/'
     end
 
     get '/_info' do

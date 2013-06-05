@@ -1,3 +1,6 @@
+require './lib/property'
+require './lib/import'
+
 module Rentify
   module Helpers
     def validated params
@@ -33,7 +36,6 @@ module Rentify
       end
     end
 
-    # proc?
     RANDOMIZE = {
       :bedroom_count => 1..10,
       :latitude => 51.201000..51.601000,
@@ -50,13 +52,16 @@ module Rentify
     end
 
     def add_random_seed_data number = 10
-      number.times.collect { Rentify::Property.add get_add_data }
+      number.times.collect { Property.add get_add_data }
     end
 
-# def
-#   and call from config.ru
-#     data = Rentify::Import.import('./import/data.txt')
-# data.each {|d| Rentify::Property.add d }
+    def clear_seed_data
+      Property.clear
+    end
 
+    def load_test_data
+      data = Import.import('./import/data.txt')
+      data.each { |d| Property.add d }
+    end
   end
 end
