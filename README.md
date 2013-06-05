@@ -1,3 +1,12 @@
+# Rentify coding exercise
+
+## About
+
+This is my solution to a coding exercise for a job application to [Rentify](https://www.rentify.com/)
+
+It can be viewed on Heroku : http://rentify.herokuapp.com/
+
+
 ## Install
 
 Get the code from GitHub
@@ -37,6 +46,6 @@ Command line :
 
 * The API endpoints can be hit via curl, just for kicks :
 
-    curl http://0.0.0.0:9292/find\?id\=Flat%201
+        curl http://0.0.0.0:9292/find\?id\=Flat%201
 
-    => {"id":"Flat 1","name":"Sizeable house","bedroom_count":2,"latitude":51.501,"longitude":-0.142}
+        => {"id":"Flat 1","name":"Sizeable house","bedroom_count":2,"latitude":51.501,"longitude":-0.142}
