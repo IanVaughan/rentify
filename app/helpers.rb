@@ -33,8 +33,7 @@ module Rentify
       end
     end
 
-
-    NUMBER_TO_ADD = 100
+    # proc?
     RANDOMIZE = {
       :bedroom_count => 1..10,
       :latitude => 51.201000..51.601000,
@@ -50,8 +49,14 @@ module Rentify
       }
     end
 
-    def add_random_seed_data
-      NUMBER_TO_ADD.times.collect { Rentify::Property.add get_add_data }
+    def add_random_seed_data number = 10
+      number.times.collect { Rentify::Property.add get_add_data }
     end
+
+# def
+#   and call from config.ru
+#     data = Rentify::Import.import('./import/data.txt')
+# data.each {|d| Rentify::Property.add d }
+
   end
 end
