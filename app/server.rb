@@ -45,7 +45,7 @@ module Rentify
       property = property.first
 
       others = property.within(distance)
-      others = property.rooms(min: property.bedroom_count)
+      others = property.rooms(dataset: others, min: property.bedroom_count)
       erb :property_detail,
           :locals => {
             property: property,

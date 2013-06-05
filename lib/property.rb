@@ -2,6 +2,8 @@ require './lib/distance_calculator'
 require 'json'
 
 module Rentify
+  class FindError < ArgumentError; end
+
   class Property
     include DistanceCalculator
     include Enumerable
@@ -18,7 +20,7 @@ module Rentify
     end
 
     def each
-      @properties.each {|p| yield p}
+      properties.each {|p| yield p}
     end
 
     def distances
@@ -31,6 +33,7 @@ module Rentify
         save
       end
     end
+    # private :distances
 
     # could only sort for upto distance required,
     # but would mean resorting if a larger distance was requested
@@ -38,16 +41,22 @@ module Rentify
     def ordered #by :distance / :rooms / :price
       @ordered ||= distances.sort_by { |k| k[:distance] }
     end
+    # private :ordered
 
-    def within distance
+    def within distance, sorted = true
       # if ordered, then just need to loop until first exceeded
-      keep = ordered.keep_if { |p| p[:distance] < distance }
+      dataset = sorted ? ordered : distances
+      keep = dataset.select { |p| p[:distance] < distance }
       keep.map { |p| p[:to] }
     end
 
-    def rooms min: 0, max: 10
-      keep = ordered.keep_if { |p| (p[:to].bedroom_count >= min && p[:to].bedroom_count < max) }
-      keep.map { |p| p[:to] }
+    def rooms dataset: properties, min: 0, max: 10
+      raise FindError unless min.is_a?(Fixnum) && max.is_a?(Fixnum)
+      # keep = ordered
+      # keep.delete(self)
+      dataset.select {|p| (p.bedroom_count >= min && p.bedroom_count < max) }
+      # keep = ordered.keep_if { |p| (p[:to].bedroom_count >= min && p[:to].bedroom_count < max) }
+      # keep.map { |p| p[:to] }
     end
 
     def to_json
@@ -66,39 +75,66 @@ module Rentify
       hash
     end
 
+    # Class methods
+    class << self
 
-    # class methods
-
-    # should this be within the initialize?
-    def self.add data
-      self.all << self.new(data)
-    end
-
-    def self.each
-      self.all.each { |e| yield e }
-    end
-
-    def self.all
-      @@all ||= []
-    end
-
-    def self.clear
-      self.all.clear
-    end
-
-    def self.find params={}
-      return self.all if params == {}
-
-      list = self.all.find_all do |p|
-        params.map do |k,v|
-          case v
-          when String then p.send(k) =~ /#{v}/i
-          when Fixnum then p.send(k) == v
-          end
-        end.all?
+      # should this be within the initialize?
+      def add data
+        self.all << self.new(data)
       end
 
-      list
+      def each
+        self.all.each { |e| yield e }
+      end
+
+      def all
+        @@all ||= []
+      end
+
+      def clear
+        self.all.clear
+      end
+
+      # mega overloaded function! needs to be broken down
+      def find params={}
+        return self.all if params.empty?
+
+        dataset = params.has_key?(:from) ? params[:from] : self.all
+
+        if params.has_key?(:from) && !(params.has_key?(:distance) || params.has_key?(:min_rooms))
+          raise FindError, "Supplied params incorrect for :from:#{params[:from]} (:distance:#{params[:distance]}, :min_rooms:#{params[:min_rooms]}) " #[#{params}]"
+        end
+
+        result = dataset.each do |p|
+          params.each do |k,v|
+            case k
+            when :distance
+              raise FindError unless params.has_key?(:from)
+
+              data = p.within(v, params[:ordered])
+
+              %w{distance from ordered}.each {|s| params.delete(s.to_sym) }
+              new_params = params.merge(from: data)
+
+              return params.empty? ? data : find(new_params)
+              data
+            when :min_rooms
+              return p.rooms(dataset: params[:from], min: v)
+            end
+          end
+        end
+
+        a = dataset.find_all do |p|
+          b = params.map do |k,v|
+            case v
+            when String then p.send(k) =~ /#{v}/i
+            when Fixnum then p.send(k) == v
+            end
+          end
+          b.all?
+        end
+      end
+
     end
   end
 end
